@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ZDK AI Prompt Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="text-center mb-5">ZDK AI Prompt Generator</h1>
+      <div class="form-group">
+        <label for="promptInput">Enter a prompt:</label>
+        <input type="text" class="form-control" id="promptInput">
+      </div>
+      <button id="submitButton" class="btn btn-primary btn-block">Submit</button>
+      <div id="responseContainer" class="mt-3" style="display: none;">
+        <h2>Response:</h2>
+        <p id="responseText"></p>
+      </div>
+    </div>
+
+    <script>
+      const submitButton = document.querySelector("#submitButton");
+      const promptInput = document.querySelector("#promptInput");
+      const responseContainer = document.querySelector("#responseContainer");
+      const responseText = document.querySelector("#responseText");
+
+      submitButton.addEventListener("click", () => {
+        const prompt = promptInput.value;
+
+        if (prompt) {
+          fetch("/prompt", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `prompt=${encodeURIComponent(prompt)}`
+          })
+            .then(response => response.text())
+            .then(text => {
+              responseText.textContent = text;
+              responseContainer.style.display = "block";
+            });
+        }
+      });
+    </script>
+  </body>
+</html>
